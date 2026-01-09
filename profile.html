@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SepsisGuard - Profile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body class="dashboard-body">
+    <div class="container" style="max-width: 800px; padding-top: 4rem;">
+        <div class="card">
+            <div class="card-header">
+                <h3><i class="fa-solid fa-user-circle"></i> Patient Profile</h3>
+                <a href="dashboard.html" class="btn btn-outline btn-sm">Back to Dashboard</a>
+            </div>
+
+            <div class="profile-details">
+                <div class="profile-row">
+                    <span class="label">Patient ID:</span>
+                    <span class="value" id="p-id">Loading...</span>
+                </div>
+                <div class="profile-row">
+                    <span class="label">Name:</span>
+                    <span class="value" id="p-name">Loading...</span>
+                </div>
+                <div class="profile-row">
+                    <span class="label">Age:</span>
+                    <span class="value" id="p-age">Loading...</span>
+                </div>
+                <div class="profile-row">
+                    <span class="label">Date of Birth:</span>
+                    <span class="value" id="p-dob">Loading...</span>
+                </div>
+                <div class="profile-row">
+                    <span class="label">Contact:</span>
+                    <span class="value" id="p-contact">Loading...</span>
+                </div>
+                <div class="profile-row">
+                    <span class="label">Email:</span>
+                    <span class="value" id="p-email">Loading...</span>
+                </div>
+            </div>
+
+            <div style="margin-top: 2rem; border-top: 1px solid #e2e8f0; padding-top: 1.5rem;">
+                <button id="logout-btn" class="btn btn-primary"
+                    style="background-color: var(--accent-red); border-color: var(--accent-red);">
+                    <i class="fa-solid fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = Auth.checkAuth(); // Redirects if not logged in
+
+            document.getElementById('p-id').textContent = user.patientId;
+            document.getElementById('p-name').textContent = user.name;
+            document.getElementById('p-age').textContent = user.age;
+            document.getElementById('p-dob').textContent = user.dob;
+            document.getElementById('p-contact').textContent = user.contact;
+            document.getElementById('p-email').textContent = user.email;
+
+            document.getElementById('logout-btn').addEventListener('click', () => {
+                Auth.logout();
+            });
+        });
+    </script>
+</body>
+
+</html>

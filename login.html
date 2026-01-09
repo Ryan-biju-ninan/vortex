@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SepsisGuard - Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body class="auth-body">
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <i class="fa-solid fa-heart-pulse logo-icon"></i>
+                <h2>Patient Login</h2>
+                <p>Enter your credentials to access the screening tool.</p>
+            </div>
+
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="patient-id">Patient ID</label>
+                    <div class="input-icon-wrapper">
+                        <i class="fa-solid fa-id-card"></i>
+                        <input type="text" id="patient-id" placeholder="e.g. P-1234" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-icon-wrapper">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="password" placeholder="Enter password" required>
+                    </div>
+                </div>
+
+                <div id="error-msg" class="error-text hidden"></div>
+
+                <button type="submit" class="btn btn-primary btn-block">Login</button>
+            </form>
+
+            <div class="auth-footer">
+                <p>New User? <a href="register.html">Click here to Register</a></p>
+                <a href="index.html" class="back-link"><i class="fa-solid fa-arrow-left"></i> Back to Home</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+    <script>
+        // Redirect if already logged in
+        if (Auth.getCurrentUser()) {
+            window.location.href = 'dashboard.html';
+        }
+
+        const loginForm = document.getElementById('login-form');
+        const errorMsg = document.getElementById('error-msg');
+
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const id = document.getElementById('patient-id').value.trim();
+            const pass = document.getElementById('password').value.trim();
+
+            const result = Auth.login(id, pass);
+
+            if (result.success) {
+                window.location.href = 'dashboard.html';
+            } else {
+                errorMsg.textContent = result.message;
+                errorMsg.classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+
+</html>

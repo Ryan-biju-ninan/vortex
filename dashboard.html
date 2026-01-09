@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SepsisGuard - Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="auth.js"></script>
+    <script>
+        // Check Auth immediately
+        Auth.checkAuth();
+    </script>
+</head>
+
+<body class="dashboard-body">
+    <div class="dashboard-layout">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fa-solid fa-heart-pulse"></i>
+                <span>SepsisGuard</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
+                <a href="#" class="active"><i class="fa-solid fa-gauge-high"></i> Dashboard</a>
+                <a href="index.html#how-it-works"><i class="fa-solid fa-circle-info"></i> Guide</a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="simulation-controls">
+                    <h4><i class="fa-solid fa-flask"></i> Simulation</h4>
+                    <button class="btn btn-outline btn-sm" id="btn-sim-case1">Load Case 1: Risks</button>
+                    <button class="btn btn-outline btn-sm" id="btn-reset">Reset Data</button>
+                </div>
+            </div>
+        </aside>
+
+        <main class="dashboard-content">
+            <header class="top-bar">
+                <h2>Patient Screening Dashboard</h2>
+                <div class="user-profile-dropdown" id="user-dropdown-trigger">
+                    <div class="user-info-trigger">
+                        <span id="user-name-display">Clinician Mode</span>
+                        <i class="fa-solid fa-chevron-down fa-xs" style="margin-left: 5px;"></i>
+                        <i class="fa-solid fa-user-circle fa-lg" style="margin-left: 8px;"></i>
+                    </div>
+
+                    <div class="dropdown-menu hidden" id="user-dropdown-menu">
+                        <a href="profile.html" class="dropdown-item">
+                            <i class="fa-solid fa-id-badge"></i> View Profile
+                        </a>
+                        <a href="#" id="dropdown-logout" class="dropdown-item text-red">
+                            <i class="fa-solid fa-sign-out-alt"></i> Logout
+                        </a>
+                    </div>
+                </div>
+            </header>
+
+            <div class="dashboard-grid">
+                <!-- Vitals Input Section -->
+                <section class="card input-card">
+                    <div class="card-header">
+                        <h3><i class="fa-solid fa-pen-to-square"></i> New Reading</h3>
+                    </div>
+                    <form id="vitals-form">
+                        <div class="form-group">
+                            <label for="resp-rate">Respiratory Rate (breaths/min)</label>
+                            <input type="number" id="resp-rate" name="resp-rate" min="0" max="60"
+                                placeholder="Normal: 12-20" required>
+                            <span class="help-text">qSOFA Criteria: ≥ 22 /min</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="sys-bp">Systolic BP (mmHg)</label>
+                            <input type="number" id="sys-bp" name="sys-bp" min="0" max="300" placeholder="Normal: >100"
+                                required>
+                            <span class="help-text">qSOFA Criteria: ≤ 100 mmHg</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="gcs">GCS Mental Status</label>
+                            <select id="gcs" name="gcs" required>
+                                <option value="15">15 (Normal / Alert)</option>
+                                <option value="14">14 (Confused)</option>
+                                <option value="13">13 (Lethargic)</option>
+                                <option value="<13">&lt; 13 (Unconscious/Other)</option>
+                            </select>
+                            <span class="help-text">qSOFA Criteria: &lt; 15</span>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-block">Add Reading</button>
+                    </form>
+                </section>
+
+                <!-- Current Status / Alert Section -->
+                <section class="card status-card">
+                    <div class="card-header">
+                        <h3>Current Risk Assessment</h3>
+                        <!-- Status Badge will be dynamically updated -->
+                        <div id="risk-badge" class="badge badge-success">Low Risk</div>
+                    </div>
+
+                    <div class="qsofa-score-display">
+                        <div class="score-circle" id="score-display">0</div>
+                        <div class="score-label">qSOFA Score</div>
+                    </div>
+
+                    <div id="alert-box" class="alert-box hidden">
+                        <h4><i class="fa-solid fa-triangle-exclamation"></i> Warning: Risk Detected</h4>
+                        <ul id="risk-reasons">
+                            <!-- Reasons will be injected here -->
+                        </ul>
+                    </div>
+
+                    <p class="disclaimer-text">
+                        <small>* This is a screening result, NOT a diagnosis.</small>
+                    </p>
+                </section>
+
+                <!-- Charts Section -->
+                <section class="card chart-card">
+                    <div class="card-header">
+                        <h3>Vitals Trends</h3>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="vitalsChart"></canvas>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+    <script src="script.js"></script>
+    <script>
+        // Update user name
+        const currentUser = Auth.getCurrentUser();
+        if (currentUser && currentUser.name) {
+            document.getElementById('user-name-display').textContent = currentUser.name;
+        }
+
+        // Dropdown Logic
+        const dropdownTrigger = document.getElementById('user-dropdown-trigger');
+        const dropdownMenu = document.getElementById('user-dropdown-menu');
+        const logoutBtn = document.getElementById('dropdown-logout');
+
+        // Toggle menu
+        dropdownTrigger.addEventListener('click', (e) => {
+            // Prevent closing immediately if clicking inside
+            e.stopPropagation();
+            dropdownMenu.classList.toggle('hidden');
+        });
+
+        // Close when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!dropdownTrigger.contains(e.target)) {
+                dropdownMenu.classList.add('hidden');
+            }
+        });
+
+        // Logout action
+        logoutBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            Auth.logout();
+        });
+    </script>
+</body>
+
+</html>

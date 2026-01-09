@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SepsisGuard - Clinical Support Tool</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <header class="main-header">
+        <div class="container">
+            <div class="logo">
+                <i class="fa-solid fa-heart-pulse"></i>
+                <span>SepsisGuard</span>
+            </div>
+            <nav>
+                <a href="#how-it-works">How It Works</a>
+                <a href="#disclaimer">Disclaimer</a>
+                <a href="dashboard.html" class="btn btn-primary">Launch Dashboard</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h1>Rule-Based <br>Sepsis Screening</h1>
+                    <p class="subtitle">A clinical decision-support tool using qSOFA criteria to screen for sepsis risk
+                        in non-ICU settings.</p>
+                    <div class="hero-actions">
+                        <a href="dashboard.html" class="btn btn-lg btn-primary">Start Screening <i
+                                class="fa-solid fa-arrow-right"></i></a>
+                        <a href="#how-it-works" class="btn btn-lg btn-outline">Learn More</a>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <!-- Geometric abstract representation of health data -->
+                    <div class="pulse-circle"></div>
+                    <div class="card-glass">
+                        <div class="stat-row">
+                            <span>Resp Rate</span>
+                            <span class="value warning">23 /min</span>
+                        </div>
+                        <div class="stat-row">
+                            <span>Sys BP</span>
+                            <span class="value normal">110 mmHg</span>
+                        </div>
+                        <div class="stat-label">qSOFA Detection Active</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="how-it-works" class="features">
+            <div class="container">
+                <h2>How It Works</h2>
+                <div class="grid-3">
+                    <div class="feature-card">
+                        <i class="fa-solid fa-stethoscope"></i>
+                        <h3>1. Input Vitals</h3>
+                        <p>Enter patient Respiratory Rate, Systolic Blood Pressure, and GCS Mental Status.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fa-solid fa-calculator"></i>
+                        <h3>2. Rule-Based Analysis</h3>
+                        <p>The system applies qSOFA rules to evaluate risk based on proven clinical criteria.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fa-solid fa-chart-line"></i>
+                        <h3>3. Trend Monitoring</h3>
+                        <p> Visualize trends over time to detect rapid deterioration early.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="disclaimer" class="disclaimer-section">
+            <div class="container">
+                <div class="disclaimer-box">
+                    <h3><i class="fa-solid fa-triangle-exclamation"></i> Important Medical Disclaimer</h3>
+                    <p>This software is a <strong>clinical decision-support tool</strong> only. It screens for risk
+                        based on qSOFA criteria but <strong>does not provide medical diagnosis or treatment
+                            recommendations.</strong></p>
+                    <p>Always consult a qualified healthcare professional for diagnosis and treatment. This tool is
+                        designed for educational and demonstration purposes.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 SepsisGuard Demo. Built for Hackathon.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Simple script for smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
